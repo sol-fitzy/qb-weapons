@@ -2,6 +2,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = QBCore.Functions.GetPlayerData()
 local CurrentWeaponData, CanShoot, MultiplierAmount, oldAmmoAmount = {}, true, 0, 0
+local shots = 0
 
 -------------------------------- FUNCTIONS --------------------------------
 
@@ -11,17 +12,25 @@ local function jamText()
     EndTextCommandDisplayHelp(0, 0, 1, -1)
 end
 
+local function isPlayerAWitness(witnesses)
+    for k, v in pairs(witnesses) do
+        if v == PlayerPedId() then
+            return true
+        end
+    end
+    return false
+end
+
 local jammed = false
 local function listen4Unjam(ped, weapon, ammo)
     jammed = true
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while jammed do
-            Citizen.Wait(3)
+            Wait(0)
             jamText()
             if (IsControlJustReleased(0, 45) or IsDisabledControlJustReleased(0, 45)) then
                 SetPedAmmo(ped, weapon, ammo)
                 MakePedReload(ped)
-                TriggerServerEvent("weapons:server:UpdateWeaponAmmo", CurrentWeaponData, tonumber(ammo))
                 jammed = false
             end
         end
@@ -53,19 +62,18 @@ end)
 AddEventHandler("CEventGunShot", function(witnesses, ped)
     -- The ped that shot the gun must be the player.
     if PlayerPedId() ~= ped then return end
-    -- This event can be triggered multiple times for a single gunshot,
-    -- so ignore if the first ped in witnesses is not the player ped.
-    -- (it's always first in the array and shows up only on the first event for the gunshot)
-    if witnesses[1] ~= ped then return end
+    -- This event can be triggered multiple times for a single gunshot, so we only want to run the code once.
+    -- We can do this by checking if the player is a witness. If there are no witnesses, then the player is the shooter.
+    if witnesses and not isPlayerAWitness(witnesses) then return end
     local weapon = GetSelectedPedWeapon(ped)
     local ammo = GetAmmoInPedWeapon(ped, weapon)
-    TriggerServerEvent("weapons:server:UpdateWeaponAmmo", CurrentWeaponData, tonumber(ammo))
     local _, clipAmmo = GetAmmoInClip(ped, weapon)
     local chance = Config.JamChance
     if math.random(1, chance) == 1 and clipAmmo > 0 then
         SetPedAmmo(ped, weapon, 0)
         listen4Unjam(ped, weapon, ammo)
     end
+    TriggerServerEvent("weapons:server:UpdateWeaponAmmo", CurrentWeaponData, tonumber(ammo))
     if MultiplierAmount <= 0 then return end
     TriggerServerEvent("weapons:server:UpdateWeaponQuality", CurrentWeaponData, MultiplierAmount)
     MultiplierAmount = 0
