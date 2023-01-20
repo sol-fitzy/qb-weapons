@@ -3,8 +3,10 @@ Config = Config or {}
 Config.ReloadTime = math.random(4000, 6000)
 
 Config.JamChance = 1000 -- 1/1000 chance of jamming per bullet fired
---Set this to true if you use an inventory that uses item decay
-Config.AttachmentDurability = false 
+
+Config.AttachmentDurability = false -- If you want to disable durability for attachments, set this to false.
+-- If an error occurs with attachments, more than likey you have an attachment or weapon that is not in the list below. -- 
+-- Add the weapon or attachment to the list below and set the value to whatever you want. --
 
 Config.DurabilityBlockedWeapons = {
     "weapon_stungun",
