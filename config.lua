@@ -314,6 +314,19 @@ Config.WeaponsDamage = {
     [`WEAPON_COMBATPDW`] = {model = `WEAPON_COMBATPDW`, modifier = 0.1, disableCriticalHits = true},
 }
 
+Config.Throwables = {
+    'ball',
+    'bzgas',
+    'flare',
+    'grenade',
+    'molotov',
+    'pipebomb',
+    'proxmine',
+    'smokegrenade',
+    'snowball',
+    'stickybomb'
+}
+
 Config.RepairPoints = {
     [1] = {
         coords = vector4(11.17, -1098.84, 29.8, 156.87),
