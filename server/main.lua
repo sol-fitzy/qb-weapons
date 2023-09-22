@@ -214,6 +214,7 @@ RegisterNetEvent('weapons:server:UpdateWeaponQuality', function(data, RepeatAmou
                                     local HasAttach = HasAttachment(v.component, WeaponSlot.info.attachments)
                                     if HasAttach then
                                         local DecreaseAttach = Config.DurabilityMultiplier[v.item]
+                                        if not DecreaseAttach then print('No Durability for '..v.item .. ' found, please add it to the Config.DurabilityMultiplier table') return end
                                         if v.quality then
                                             if v.quality - DecreaseAttach > 0 then
                                                 v.quality = v.quality - DecreaseAttach
@@ -253,7 +254,8 @@ RegisterNetEvent('weapons:server:UpdateWeaponQuality', function(data, RepeatAmou
                                 for k, v in pairs(WeaponSlot.info.attachments) do
                                     local HasAttach = HasAttachment(v.component, WeaponSlot.info.attachments)
                                     if HasAttach then
-                                    local DecreaseAttach = Config.DurabilityMultiplier[v.item]
+                                        local DecreaseAttach = Config.DurabilityMultiplier[v.item]
+                                        if not DecreaseAttach then print('No Durability for '..v.item .. ' found, please add it to the Config.DurabilityMultiplier table') return end
                                         if not v.quality then
                                             v.quality = 100
                                             if v.quality - DecreaseAttach > 0 then
