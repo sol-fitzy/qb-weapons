@@ -213,8 +213,17 @@ RegisterNetEvent('weapons:server:UpdateWeaponQuality', function(data, RepeatAmou
                                 for k, v in pairs(WeaponSlot.info.attachments) do
                                     local HasAttach = HasAttachment(v.component, WeaponSlot.info.attachments)
                                     if HasAttach then
+                                        if not v.item then 
+                                            print('No Item for '..v.component.. ' on '..WeaponData.name..' found. \n' ..json.encode(WeaponSlot.info.attachments))
+                                            Player.Functions.SetInventory(Player.PlayerData.items, true)
+                                            return
+                                        end
                                         local DecreaseAttach = Config.DurabilityMultiplier[v.item]
-                                        if not DecreaseAttach then print('No Durability for '..v.item .. ' found, please add it to the Config.DurabilityMultiplier table') return end
+                                        if not DecreaseAttach then 
+                                            print('No Durability for '..v.item .. ' found, please add it to the Config.DurabilityMultiplier table')
+                                            Player.Functions.SetInventory(Player.PlayerData.items, true)
+                                            return
+                                        end
                                         if v.quality then
                                             if v.quality - DecreaseAttach > 0 then
                                                 v.quality = v.quality - DecreaseAttach
@@ -254,8 +263,16 @@ RegisterNetEvent('weapons:server:UpdateWeaponQuality', function(data, RepeatAmou
                                 for k, v in pairs(WeaponSlot.info.attachments) do
                                     local HasAttach = HasAttachment(v.component, WeaponSlot.info.attachments)
                                     if HasAttach then
+                                        if not v.item then 
+                                            print('No Item for '..v.component.. ' on '..WeaponData.name..' found. \n' ..json.encode(WeaponSlot.info.attachments))
+                                            Player.Functions.SetInventory(Player.PlayerData.items, true)
+                                            return 
+                                        end
                                         local DecreaseAttach = Config.DurabilityMultiplier[v.item]
-                                        if not DecreaseAttach then print('No Durability for '..v.item .. ' found, please add it to the Config.DurabilityMultiplier table') return end
+                                        if not DecreaseAttach then print('No Durability for '..v.item .. ' found, please add it to the Config.DurabilityMultiplier table')
+                                            Player.Functions.SetInventory(Player.PlayerData.items, true)
+                                            return 
+                                        end
                                         if not v.quality then
                                             v.quality = 100
                                             if v.quality - DecreaseAttach > 0 then
